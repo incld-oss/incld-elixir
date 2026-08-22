@@ -29,7 +29,7 @@ defmodule Incld.MixProject do
   defp deps do
     [
       {:jason, "~> 1.4"},
-      {:req, "~> 0.4.0"},
+      {:req, "~> 0.7.3"},
       {:ex_doc, "~> 0.38", only: :dev, runtime: false}
     ]
   end
