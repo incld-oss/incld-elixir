@@ -81,10 +81,12 @@ defmodule IncldTest do
       {request, response}
     end
 
+    Incld.TestAdapter.put(adapter)
+
     client =
       "my-api-key"
       |> Incld.client(base_url: "http://incld.test")
-      |> Req.merge(adapter: adapter)
+      |> Req.merge(adapter: Incld.TestAdapter)
 
     assert {:ok, %{data: [%{"id" => "evt_1"}]}} =
              Incld.Schedules.events(client, "sch_123", %{cursor: "evt_0"})
@@ -102,10 +104,12 @@ defmodule IncldTest do
        )}
     end
 
+    Incld.TestAdapter.put(adapter)
+
     client =
       "my-api-key"
       |> Incld.client(base_url: "http://incld.test")
-      |> Req.merge(adapter: adapter)
+      |> Req.merge(adapter: Incld.TestAdapter)
 
     assert {:ok, %{"id" => "run_123", "schedule_id" => "sch_123"}} =
              Incld.Runs.get(client, "run_123")
