@@ -2,7 +2,7 @@ defmodule Incld.MixProject do
   use Mix.Project
 
   @version "0.1.0"
-  @source_url "https://github.com/incld-dev/incld-elixir"
+  @source_url "https://github.com/incld-oss/incld-elixir"
 
   def project do
     [
