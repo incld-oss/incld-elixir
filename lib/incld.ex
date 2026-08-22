@@ -1,12 +1,12 @@
 defmodule Incld do
   @moduledoc """
-  Elixir client for the INCLD API.
+  Elixir client for the incld API.
   """
 
   @default_base_url "https://api.incld.dev/v1"
 
   @doc """
-  Creates a Req client for the INCLD API.
+  Creates a Req client for the incld API.
 
   Pass `:base_url` to target a local API or proxy in development.
   """

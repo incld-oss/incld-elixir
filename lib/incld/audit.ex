@@ -1,5 +1,5 @@
 defmodule Incld.Audit do
-  @moduledoc "Server-side helpers for querying and creating INCLD audit events."
+  @moduledoc "Server-side helpers for querying and creating incld audit events."
 
   alias Incld.Request
 

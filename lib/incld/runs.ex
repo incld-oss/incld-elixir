@@ -1,5 +1,5 @@
 defmodule Incld.Runs do
-  @moduledoc "Functions for listing INCLD execution runs."
+  @moduledoc "Functions for listing incld execution runs."
 
   alias Incld.Request
 

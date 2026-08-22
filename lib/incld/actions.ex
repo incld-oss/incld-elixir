@@ -1,5 +1,5 @@
 defmodule Incld.Actions do
-  @moduledoc "Functions for defining and inspecting INCLD actions."
+  @moduledoc "Functions for defining and inspecting incld actions."
 
   alias Incld.Request
 
