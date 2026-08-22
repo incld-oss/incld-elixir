@@ -1,0 +1,11 @@
+defmodule Incld.Audit do
+  @moduledoc "Server-side helpers for querying and creating INCLD audit events."
+
+  alias Incld.Request
+
+  def list(client, params \\ %{}), do: Request.get_page(client, "/audit-events", params)
+  def get(client, id), do: Request.get_data(client, "/audit-events/#{id}")
+
+  def create(client, attrs, opts \\ []) when is_map(attrs),
+    do: Request.post_data(client, "/audit-events", attrs, [201], opts)
+end
