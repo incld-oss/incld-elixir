@@ -18,6 +18,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Enforce lowercase brand
+        run: |
+          legacy_brand='IN''CLD'
+          if git grep -n -I -E "(^|[^[:alnum:]_])${legacy_brand}([^[:alnum:]_]|$)"; then
+            echo "Use incld, @incld, or incld.dev in public-facing text."
+            exit 1
+          fi
       - uses: erlef/setup-beam@54075bcc5e249e4758d363f27d099f55d843f124 # v1
         with:
           elixir-version: 1.19.5

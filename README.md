@@ -1,6 +1,6 @@
-# INCLD Elixir SDK
+# incld Elixir SDK
 
-Req-based trusted-server client for the INCLD v1 API.
+Req-based trusted-server client for the incld v1 API.
 
 ```elixir
 client = Incld.client(System.fetch_env!("INCLD_SECRET_KEY"))
@@ -31,7 +31,7 @@ client =
   )
 ```
 
-This is a trusted-server client. Do not expose it or its key to LiveView hooks or browser JavaScript. If a Phoenix application uses the INCLD React packages, build a same-origin controller that authenticates the current user, allowlists routes, scopes reads, and injects actor identity.
+This is a trusted-server client. Do not expose it or its key to LiveView hooks or browser JavaScript. If a Phoenix application uses the incld React packages, build a same-origin controller that authenticates the current user, allowlists routes, scopes reads, and injects actor identity.
 
 ## Modules and functions
 
@@ -65,7 +65,7 @@ case Incld.Approvals.get(client, approval_id) do
   {:ok, approval} -> approval
 
   {:error, %Incld.APIError{} = error} ->
-    Logger.error("INCLD request failed",
+    Logger.error("incld request failed",
       status: error.status,
       code: error.code,
       fields: error.fields,

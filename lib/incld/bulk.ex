@@ -1,5 +1,5 @@
 defmodule Incld.Bulk do
-  @moduledoc "Server-side helpers for the INCLD Bulk API."
+  @moduledoc "Server-side helpers for the incld Bulk API."
 
   alias Incld.Request
 

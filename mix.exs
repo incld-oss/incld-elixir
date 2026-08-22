@@ -11,7 +11,7 @@ defmodule Incld.MixProject do
       elixir: "~> 1.19",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
-      description: "Trusted-server Elixir client and webhook verifier for the INCLD API",
+      description: "Trusted-server Elixir client and webhook verifier for the incld API",
       source_url: @source_url,
       package: package(),
       docs: docs(),
@@ -41,7 +41,7 @@ defmodule Incld.MixProject do
       links: %{
         "Documentation" => "https://hexdocs.pm/incld",
         "GitHub" => @source_url,
-        "INCLD" => "https://incld.dev"
+        "incld" => "https://incld.dev"
       },
       files: ~w(lib .formatter.exs mix.exs README.md CHANGELOG.md LICENSE)
     ]

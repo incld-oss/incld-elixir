@@ -1,5 +1,5 @@
 defmodule Incld.Sessions do
-  @moduledoc "Functions for creating scoped INCLD session tokens."
+  @moduledoc "Functions for creating scoped incld session tokens."
 
   alias Incld.Request
 

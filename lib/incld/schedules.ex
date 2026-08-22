@@ -1,6 +1,6 @@
 defmodule Incld.Schedules do
   @moduledoc """
-  Functions for interacting with INCLD Schedules.
+  Functions for interacting with incld Schedules.
   """
 
   alias Incld.Request
