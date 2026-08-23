@@ -3,14 +3,17 @@
 Req-based trusted-server client for the incld v1 API.
 
 ```elixir
-client = Incld.client(System.fetch_env!("INCLD_SECRET_KEY"))
+client =
+  Incld.client(System.fetch_env!("INCLD_SECRET_KEY"),
+    organization_id: "org_123",
+    user_id: "user_123"
+  )
 
 {:ok, schedule} =
   Incld.Schedules.create(
     client,
     %{
       action: "sync_contacts",
-      external_user_id: "user_123",
       recurrence: recurrence,
       timezone: "Australia/Melbourne"
     },
@@ -27,11 +30,13 @@ Schedule commands use stable action identifiers, canonical Audit paths are `/aud
 ```elixir
 client =
   Incld.client(System.fetch_env!("INCLD_SECRET_KEY"),
-    base_url: "https://api.incld.dev/v1"
+    base_url: "https://api.incld.dev/v1",
+    organization_id: "org_123",
+    user_id: "user_123"
   )
 ```
 
-This is a trusted-server client. Do not expose it or its key to LiveView hooks or browser JavaScript. If a Phoenix application uses the incld React packages, build a same-origin controller that authenticates the current user, allowlists routes, scopes reads, and injects actor identity.
+This is a trusted-server client. Do not expose it or its key to LiveView hooks or browser JavaScript. A client without `organization_id:` is an explicit project administrator client. Set `organization_id:` for organization-wide work and add `user_id:` for end-user request paths; the API then constrains direct ID lookups as well as lists and mutations. If a Phoenix application uses the incld React packages, build a same-origin controller that authenticates the user, requires their active organization, allowlists routes, and injects both identities.
 
 ## Modules and functions
 
@@ -51,7 +56,10 @@ This is a trusted-server client. Do not expose it or its key to LiveView hooks o
 
 ```elixir
 {:ok, %{data: schedules, meta: meta}} =
-  Incld.Schedules.list(client, %{limit: 100, cursor: nil})
+  Incld.Schedules.list(client, %{
+    limit: 100,
+    cursor: nil
+  })
 
 if meta["has_more"] do
   Incld.Schedules.list(client, %{limit: 100, cursor: meta["next_cursor"]})

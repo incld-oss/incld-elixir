@@ -13,6 +13,42 @@ defmodule IncldTest do
     assert client.options.auth == {:bearer, "my-api-key"}
   end
 
+  test "supports organization and end-user API scope" do
+    adapter = fn request ->
+      assert Req.Request.get_header(request, "incld-organization-id") == ["org_trusted"]
+      assert Req.Request.get_header(request, "incld-user-id") == ["user_trusted"]
+
+      {request,
+       Req.Response.new(
+         status: 200,
+         body: %{"data" => [], "meta" => %{"has_more" => false, "next_cursor" => nil}}
+       )}
+    end
+
+    client =
+      "my-api-key"
+      |> Incld.client(
+        base_url: "http://incld.test",
+        organization_id: "org_trusted",
+        user_id: "user_trusted"
+      )
+      |> Req.merge(adapter: adapter)
+
+    assert {:ok, %{data: []}} = Incld.Schedules.list(client)
+  end
+
+  test "rejects user scope without an organization" do
+    assert_raise ArgumentError, fn -> Incld.client("my-api-key", user_id: "user_trusted") end
+  end
+
+  test "rejects empty scope identifiers" do
+    assert_raise ArgumentError, fn -> Incld.client("my-api-key", organization_id: " ") end
+
+    assert_raise ArgumentError, fn ->
+      Incld.client("my-api-key", organization_id: "org_trusted", user_id: "")
+    end
+  end
+
   test "webhook verify valid signature" do
     secret = "secret123"
     payload = %{"type" => "schedule.run", "run_id" => "run_abc"}
@@ -81,12 +117,10 @@ defmodule IncldTest do
       {request, response}
     end
 
-    Incld.TestAdapter.put(adapter)
-
     client =
       "my-api-key"
       |> Incld.client(base_url: "http://incld.test")
-      |> Req.merge(adapter: Incld.TestAdapter)
+      |> Req.merge(adapter: adapter)
 
     assert {:ok, %{data: [%{"id" => "evt_1"}]}} =
              Incld.Schedules.events(client, "sch_123", %{cursor: "evt_0"})
@@ -104,12 +138,10 @@ defmodule IncldTest do
        )}
     end
 
-    Incld.TestAdapter.put(adapter)
-
     client =
       "my-api-key"
       |> Incld.client(base_url: "http://incld.test")
-      |> Req.merge(adapter: Incld.TestAdapter)
+      |> Req.merge(adapter: adapter)
 
     assert {:ok, %{"id" => "run_123", "schedule_id" => "sch_123"}} =
              Incld.Runs.get(client, "run_123")
