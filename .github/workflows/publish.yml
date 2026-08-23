@@ -3,6 +3,12 @@ name: Publish Hex package
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing release tag to publish
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -21,7 +27,11 @@ jobs:
       - run: mix format --check-formatted
       - run: mix test
       - name: Verify release tag
-        run: test "${GITHUB_REF_NAME}" = "v$(mix run -e 'IO.write(Mix.Project.config()[:version])')"
+        env:
+          RELEASE_TAG: ${{ github.event_name == 'release' && github.event.release.tag_name || inputs.release_tag }}
+        run: |
+          package_version="$(MIX_ENV=test mix run --no-compile -e 'IO.write(Mix.Project.config()[:version])')"
+          test "${RELEASE_TAG}" = "v${package_version}"
       - run: mix hex.publish --yes
         env:
           HEX_API_KEY: ${{ secrets.HEX_API_KEY }}
