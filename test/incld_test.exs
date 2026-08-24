@@ -146,4 +146,39 @@ defmodule IncldTest do
     assert {:ok, %{"id" => "run_123", "schedule_id" => "sch_123"}} =
              Incld.Runs.get(client, "run_123")
   end
+
+  test "tombstones audit PII through the trusted server API" do
+    adapter = fn request ->
+      assert request.method == :post
+      assert request.url.path == "/audit-events/event-1/tombstone"
+
+      assert Jason.decode!(request.body) == %{
+               "reason" => "data_subject_erasure",
+               "actor_id" => "privacy_admin"
+             }
+
+      {request,
+       Req.Response.new(
+         status: 200,
+         body: %{
+           "data" => %{
+             "id" => "event-1",
+             "tombstone_reason" => "data_subject_erasure",
+             "tombstone_event_id" => "event-2"
+           }
+         }
+       )}
+    end
+
+    client =
+      "my-api-key"
+      |> Incld.client(base_url: "http://incld.test")
+      |> Req.merge(adapter: adapter)
+
+    assert {:ok, %{"tombstone_event_id" => "event-2"}} =
+             Incld.Audit.tombstone(client, "event-1", %{
+               reason: "data_subject_erasure",
+               actor_id: "privacy_admin"
+             })
+  end
 end

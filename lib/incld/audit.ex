@@ -1,5 +1,5 @@
 defmodule Incld.Audit do
-  @moduledoc "Server-side helpers for querying and creating incld audit events."
+  @moduledoc "Server-side helpers for querying, creating, and tombstoning incld audit events."
 
   alias Incld.Request
 
@@ -8,4 +8,8 @@ defmodule Incld.Audit do
 
   def create(client, attrs, opts \\ []) when is_map(attrs),
     do: Request.post_data(client, "/audit-events", attrs, [201], opts)
+
+  @doc "Erases PII-bearing event fields and appends a tombstone record. Trusted servers only."
+  def tombstone(client, id, attrs, opts \\ []) when is_map(attrs),
+    do: Request.post_data(client, "/audit-events/#{id}/tombstone", attrs, [200], opts)
 end

@@ -23,7 +23,7 @@ client =
 
 Modules cover Actions, Schedules, Runs, Sessions, Approvals and policies, Audit, Bulk, and signed webhook verification. Collection helpers return `{:ok, %{data: items, meta: meta}}`; resource helpers return the unwrapped data object. API failures return `%Incld.APIError{status, code, message, fields, request_id}`.
 
-Schedule commands use stable action identifiers, canonical Audit paths are `/audit-events`, and canonical Bulk paths are `/bulk-operations`. Pass `idempotency_key:` to supported create calls when retrying mutations.
+Schedule commands use stable action identifiers, canonical Audit paths are `/audit-events`, and canonical Bulk paths are `/bulk-operations`. `Incld.Audit.tombstone/4` is the trusted-server PII erasure operation. Pass `idempotency_key:` to supported create calls when retrying mutations.
 
 ## Configure the Req client
 
@@ -47,7 +47,7 @@ This is a trusted-server client. Do not expose it or its key to LiveView hooks o
 | `Incld.Runs` | `list/2`, `get/2` |
 | `Incld.Approvals` | `list/2`, `get/2`, `check/5`, `create/3`, `update/3`, `decide/5`, `approve/4`, `reject/4`, `cancel/4`, `revoke/4`, `delete/2`, `events/2` |
 | Approval policies | `list_policies/1`, `get_policy/2`, `create_policy/2`, `update_policy/3`, `delete_policy/2` |
-| `Incld.Audit` | `list/2`, `get/2`, `create/3` |
+| `Incld.Audit` | `list/2`, `get/2`, `create/3`, `tombstone/4` |
 | `Incld.Bulk` | `list/2`, `get/2`, `create/3`, `chunks/2`, `events/2`, `cancel/3` |
 | `Incld.Sessions` | `create/2` |
 | `Incld.Webhook` | `verify/3`, `verify/4` |
